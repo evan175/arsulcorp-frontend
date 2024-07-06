@@ -9,9 +9,9 @@ frontend:
         - npm install
     build:
       commands:
-        - npm run-script build
+        - npm run build
   artifacts:
-    baseDirectory: frontend/dist
+    baseDirectory: frontend/dist/browser
     files:
       - '**/*'
   cache:
