@@ -1,5 +1,47 @@
 <div>
-    <mat-toolbar>
-        <span>Apply</span>
-      </mat-toolbar>
+  <div class="container">
+    <mat-toolbar id="header">
+        <span class='mat-display-small'>Apply</span>
+    </mat-toolbar>
+    <div class="form">
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          [formControl]="firstName"
+          (blur)="updateErrorMessage()"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Middle Name</mat-label>
+        <input
+          matInput
+          [formControl]="middleName"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          [formControl]="lastName"
+          (blur)="updateErrorMessage()"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input
+          matInput
+          placeholder="pat@example.com"
+          [formControl]="email"
+          (blur)="updateErrorMessage()"
+          required
+        />
+        @if (email.invalid) {
+          <mat-error>{{errorMessage()}}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
 </div>
