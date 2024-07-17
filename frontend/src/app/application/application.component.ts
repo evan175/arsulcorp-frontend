@@ -1,38 +1,45 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, Injectable } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {merge} from 'rxjs';
+import {MatButtonModule} from '@angular/material/button';
+import { HttpClient } from '@angular/common/http';
+import { apiUrl } from '../../environments/environment.prod';
+import { v4 as uuidv4 } from 'uuid';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-application',
   standalone: true,
-  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
+  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
   templateUrl: './application.component.html',
   styleUrl: './application.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+@Injectable({providedIn: 'root'})
 export class ApplicationComponent {
-  readonly firstName = new FormControl('', [Validators.required]);
-  readonly middleName = new FormControl('')
-  readonly lastName = new FormControl('', [Validators.required]);
-  readonly email = new FormControl('', [Validators.required, Validators.email])
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
 
-  errorMessage = signal('');
+  applicationForm = this.formBuilder.group({
+    id: uuidv4(),
+    firstName: ['', Validators.required],
+    middleName: [''],
+    lastName: ['', Validators.required],
+    number: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+  });
 
-  constructor() {
-    merge(this.firstName.statusChanges, this.firstName.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateErrorMessage());
-  }
-
-  updateErrorMessage() {
-    if (this.firstName.hasError('required')) {
-      this.errorMessage.set('You must enter a value');
-    } else {
-      this.errorMessage.set('');
+  onSubmit(){
+    if(!this.applicationForm.invalid){
+      const formData = this.applicationForm.value
+      this.http.put(`${apiUrl}/items`, formData).subscribe(res => {
+        console.log(res)
+        location.reload();
+      });
     }
   }
+  
 }

@@ -3,45 +3,66 @@
     <mat-toolbar id="header">
         <span class='mat-display-small'>Apply</span>
     </mat-toolbar>
-    <div class="form">
+    <form class="form" [formGroup]="applicationForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
         <mat-label>First Name</mat-label>
         <input
           matInput
-          [formControl]="firstName"
-          (blur)="updateErrorMessage()"
+          formControlName="firstName"
           required
         />
+        @if (applicationForm.get('firstName')?.invalid) {
+          <mat-error>First Name Required</mat-error>
+        }
       </mat-form-field>
       <mat-form-field>
         <mat-label>Middle Name</mat-label>
         <input
           matInput
-          [formControl]="middleName"
+          formControlName="middleName"
         />
       </mat-form-field>
       <mat-form-field>
         <mat-label>Last Name</mat-label>
         <input
           matInput
-          [formControl]="lastName"
-          (blur)="updateErrorMessage()"
+          formControlName="lastName"
           required
         />
+        @if (applicationForm.get('lastName')?.invalid) {
+          <mat-error>Last Name Required</mat-error>
+        }
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Enter your email</mat-label>
+        <mat-label>Email</mat-label>
         <input
           matInput
           placeholder="pat@example.com"
-          [formControl]="email"
-          (blur)="updateErrorMessage()"
+          formControlName="email"
           required
         />
-        @if (email.invalid) {
-          <mat-error>{{errorMessage()}}</mat-error>
+        @if (applicationForm.get('email')?.hasError('email') && !applicationForm.get('email')?.hasError('required')) {
+          <mat-error>Please enter a valid email address</mat-error>
+        }
+        @if (applicationForm.get('email')?.hasError('required')) {
+          <mat-error>Email is required</mat-error>
         }
       </mat-form-field>
-    </div>
+      <mat-form-field>
+        <mat-label>Phone Number</mat-label>
+        <span matTextPrefix>+1 &nbsp;</span>
+        <input
+          type="tel"
+          placeholder="888-888-8888"
+          matInput
+          formControlName="number"
+          required=
+        />
+        @if (applicationForm.get('number')?.invalid) {
+          <mat-error>Phone Number Required</mat-error>
+        }
+      </mat-form-field>
+      <button mat-flat-button type="submit">Submit</button>
+    </form>
   </div>
 </div>
