@@ -1,0 +1,15 @@
+.container {
+    padding-top: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+#home {
+    text-decoration: none;
+    color: white
+}
