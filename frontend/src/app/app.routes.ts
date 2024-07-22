@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ApplicationComponent } from './application/application.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AdminComponent } from './admin/admin.component';
 
 export const routes: Routes = [
     { 
@@ -14,6 +15,11 @@ export const routes: Routes = [
         title: 'Apply',
         component: ApplicationComponent
     },    
+    {
+        path: 'admin',
+        title: 'Admin',
+        component: AdminComponent
+    },
     { 
         path: '',
         redirectTo: '/home', 
