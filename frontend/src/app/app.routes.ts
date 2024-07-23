@@ -3,6 +3,7 @@ import { HomeComponent } from './home/home.component';
 import { ApplicationComponent } from './application/application.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AdminComponent } from './admin/admin.component';
+import { AppSubmittedComponent } from './app-submitted/app-submitted.component';
 
 export const routes: Routes = [
     { 
@@ -19,6 +20,11 @@ export const routes: Routes = [
         path: 'admin',
         title: 'Admin',
         component: AdminComponent
+    },
+    {
+        path: 'app-submitted',
+        title: 'Application Submitted',
+        component: AppSubmittedComponent
     },
     { 
         path: '',

@@ -6,15 +6,17 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
-import { apiUrl } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment.prod';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
+
 
 
 @Component({
   selector: 'app-application',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
+  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './application.component.html',
   styleUrl: './application.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,10 +36,11 @@ export class ApplicationComponent {
 
   onSubmit(){
     if(!this.applicationForm.invalid){
+      const apiUrl = environment.apiUrl
       const formData = this.applicationForm.value
       this.http.put(`${apiUrl}/items`, formData).subscribe(res => {
         console.log(res)
-        location.reload();
+        this.router.navigateByUrl('app-submitted');
       });
     }
   }
