@@ -1,0 +1,13 @@
+app-footer {
+    height: 24px;
+    margin-top: -36px;
+    width: 100%;
+}
+
+.outer {
+    min-height: 100%;
+}
+
+.inner {
+    padding-bottom: 36px;
+}
