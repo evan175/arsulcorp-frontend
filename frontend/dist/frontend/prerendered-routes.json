@@ -3,6 +3,7 @@
     "/admin",
     "/app-submitted",
     "/apply",
-    "/home"
+    "/home",
+    "/login"
   ]
 }

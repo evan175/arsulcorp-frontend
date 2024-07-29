@@ -4,6 +4,7 @@ import { ApplicationComponent } from './application/application.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AdminComponent } from './admin/admin.component';
 import { AppSubmittedComponent } from './app-submitted/app-submitted.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
     { 
@@ -25,6 +26,11 @@ export const routes: Routes = [
         path: 'app-submitted',
         title: 'Application Submitted',
         component: AppSubmittedComponent
+    },
+    {
+        path: 'login',
+        title: 'Login',
+        component: LoginComponent
     },
     { 
         path: '',
