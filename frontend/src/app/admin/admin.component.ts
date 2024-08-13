@@ -5,7 +5,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
+import { PdfService } from '../pdf.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { environment } from '../../environments/environment.prod';
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements AfterViewInit{
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private pdf: PdfService){}
 
   displayedColumns: string[] = ['id', 'firstName', 'middleName', 'lastName', 'email', 'number'];
   dataSource = new MatTableDataSource<Applicant>();
@@ -45,6 +46,11 @@ export class AdminComponent implements AfterViewInit{
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  savePDF(id: string, name: string, email: string, phoneNum: string) {
+    const doc = this.pdf.genPDF(id, name, email, phoneNum)
+    this.pdf.savePDF(doc, name)
   }
 }
 

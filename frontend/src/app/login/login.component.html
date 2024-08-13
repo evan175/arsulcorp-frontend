@@ -1,7 +1,7 @@
 <div>
     <div class="container">
         <span class="mat-display-small">Login</span>
-        <form class="login-form" [formGroup]="loginForm">
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
             <mat-form-field>
                 <mat-label>E-mail</mat-label>
                 <input
@@ -21,13 +21,15 @@
                 <button
                     mat-icon-button
                     matSuffix
-                    (click)="clickEvent($event)"
+                    type="button"
+                    (click)="clickHide()"
                     [attr.aria-label]="'Hide password'"
                     [attr.aria-pressed]="hide()"
                 >
                     <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
             </mat-form-field>
+            <button mat-flat-button type="submit">Sign In</button>
         </form>
     </div>
 </div>

@@ -17,7 +17,7 @@ export const routes: Routes = [
         title: 'Apply',
         component: ApplicationComponent
     },    
-    {
+    {//gaurd route
         path: 'admin',
         title: 'Admin',
         component: AdminComponent

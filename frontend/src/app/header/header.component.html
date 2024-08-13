@@ -7,7 +7,18 @@
             <button mat-button>About</button>
             <button mat-button>Contact</button>
             <button mat-button>About</button>
-            <button mat-flat-button routerLink="/login">Login</button>
+            @if(cognitoService.currUser() === null || cognitoService.currUser() === undefined){
+                <button mat-flat-button routerLink="/login">Login</button>
+            }
+            @else {
+                <button mat-flat-button [mat-menu-trigger-for]="menu">{{cognitoService.currUser()?.name}}</button>
+                <mat-menu #menu="matMenu">
+                    
+                    <button mat-menu-item routerLink="/admin">Applications</button>
+                    <button mat-menu-item (click)="onLogOut()">Sign out</button>
+                    
+                </mat-menu>
+            }
         </mat-toolbar>
     </div>
 </div>
