@@ -10,7 +10,7 @@ frontend:
         - npm ci
     build:
       commands:
-        - ng build
+        - npm run build
   artifacts:
     baseDirectory: ./frontend/dist/frontend/browser
     files:
