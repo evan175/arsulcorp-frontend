@@ -7,6 +7,7 @@ import {FormsModule} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { PdfService } from '../pdf.service';
+import { CognitoService } from '../cognito.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { PdfService } from '../pdf.service';
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements AfterViewInit{
-  constructor(private http: HttpClient, private pdf: PdfService){}
+  constructor(private http: HttpClient, private pdf: PdfService, private cognitoService: CognitoService){}
 
   displayedColumns: string[] = ['id', 'firstName', 'middleName', 'lastName', 'email', 'number'];
   dataSource = new MatTableDataSource<Applicant>();
@@ -31,10 +32,14 @@ export class AdminComponent implements AfterViewInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  loadData(){
+  async loadData(){
     const apiUrl = environment.apiUrl
-    this.http.get<Applicant[]>(`${apiUrl}/items`).subscribe(data => {
-      console.log(data)
+    const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
+    //const groups = (await this.cognitoService.getTokens()).tokens?.idToken?.payload['cognito:groups']
+    const headers = {'Authorization' : idToken as string, /*'Groups': groups as Array<string>*/}
+    this.http.get<Applicant[]>(`${apiUrl}/items`, {
+      headers: headers
+    }).subscribe(data => {
       const flattenedData = data.flat();
       this.dataSource.data = flattenedData;
     });

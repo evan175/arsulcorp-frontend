@@ -5,6 +5,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AdminComponent } from './admin/admin.component';
 import { AppSubmittedComponent } from './app-submitted/app-submitted.component';
 import { LoginComponent } from './login/login.component';
+import { adminGuard } from './admin.guard';
 
 export const routes: Routes = [
     { 
@@ -17,10 +18,11 @@ export const routes: Routes = [
         title: 'Apply',
         component: ApplicationComponent
     },    
-    {//gaurd route
+    {
         path: 'admin',
         title: 'Admin',
-        component: AdminComponent
+        component: AdminComponent,
+        canActivate: [adminGuard]
     },
     {
         path: 'app-submitted',

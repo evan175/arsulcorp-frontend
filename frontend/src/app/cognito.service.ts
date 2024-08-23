@@ -52,7 +52,10 @@ export class CognitoService {
    }
 
    async getCurrentUser() {
-      await getCurrentUser()
+      return await getCurrentUser()
+   }
+
+   async getCurrentUserAttributes() {
       return await fetchUserAttributes()
    }
 

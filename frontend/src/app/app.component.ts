@@ -19,7 +19,7 @@ export class AppComponent {
 
   async ngOnInit() {
     try {
-      let userAttr = await this.cognitoService.getCurrentUser()
+      let userAttr = await this.cognitoService.getCurrentUserAttributes()
       let token = localStorage.getItem('token')
       this.cognitoService.currUser.set({email: userAttr.email as string, name: userAttr.name as string, access_token: token as string})
     } catch (err) {
