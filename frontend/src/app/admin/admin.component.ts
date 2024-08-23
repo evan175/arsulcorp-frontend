@@ -35,8 +35,7 @@ export class AdminComponent implements AfterViewInit{
   async loadData(){
     const apiUrl = environment.apiUrl
     const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
-    //const groups = (await this.cognitoService.getTokens()).tokens?.idToken?.payload['cognito:groups']
-    const headers = {'Authorization' : idToken as string, /*'Groups': groups as Array<string>*/}
+    const headers = {'Authorization' : idToken as string}
     this.http.get<Applicant[]>(`${apiUrl}/items`, {
       headers: headers
     }).subscribe(data => {
