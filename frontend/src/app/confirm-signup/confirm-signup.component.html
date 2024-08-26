@@ -1,0 +1,17 @@
+<div>
+    <div class="container">
+        <span class="mat-display-small">Please confirm your registration by typing in the code sent to your email</span>
+        <form class="form" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+                <mat-label>Confirmation Code</mat-label>
+                <input
+                    matInput
+                    [(ngModel)]="code"
+                    name="code"
+                    required
+                />
+            </mat-form-field>
+            <button mat-flat-button type="submit">Submit</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div>
+    <div class='container'>
+        <span>Submitted Applications</span>
+    
+        <table mat-table>
+            <ng-container matColumnDef="houseAddress">
+                <th mat-header-cell *matHeaderCellDef> House Address </th>
+            </ng-container>
+            <ng-container matColumnDef="dateSubmitted">
+                <th mat-header-cell *matHeaderCellDef> Date Submitted </th>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef><mat-icon fontIcon="delete"></mat-icon></th>
+            </ng-container>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page">
+        </mat-paginator>
+    </div>
+</div>

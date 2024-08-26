@@ -6,6 +6,9 @@ import { AdminComponent } from './admin/admin.component';
 import { AppSubmittedComponent } from './app-submitted/app-submitted.component';
 import { LoginComponent } from './login/login.component';
 import { adminGuard } from './admin.guard';
+import { TenantSubmissionsComponent } from './tenant-submissions/tenant-submissions.component';
+import { SignupComponent } from './signup/signup.component';
+import { ConfirmSignupComponent } from './confirm-signup/confirm-signup.component';
 
 export const routes: Routes = [
     { 
@@ -33,6 +36,21 @@ export const routes: Routes = [
         path: 'login',
         title: 'Login',
         component: LoginComponent
+    },
+    {
+        path: 'signup',
+        title: 'Sign Up',
+        component: SignupComponent
+    },
+    {
+        path: 'confirm-signup/:email',
+        title: 'Confirm Sign Up',
+        component: ConfirmSignupComponent
+    },
+    {
+        path: 'applications',
+        title: 'Applications',
+        component: TenantSubmissionsComponent
     },
     { 
         path: '',

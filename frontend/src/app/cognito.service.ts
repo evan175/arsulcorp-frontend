@@ -18,13 +18,15 @@ export class CognitoService {
 
    currUser = signal<User | undefined | null>(undefined)
 
-   async signUp(signing_user: SigningUser): Promise<any> {
-      return await signUp({ //
-        username: signing_user.email,
-        password: signing_user.password,
+   async signUp(signUpUser: SignUpUser): Promise<any> {
+      return await signUp({ 
+        username: signUpUser.email,
+        password: signUpUser.password,
         options: {
           userAttributes: {
-            email: signing_user.email
+            email: signUpUser.email,
+            name: signUpUser.name,
+            phone_number: signUpUser.number
           }
         }
       })
@@ -38,10 +40,10 @@ export class CognitoService {
       }
    }
 
-   async signIn(signing_user: SigningUser): Promise<any> {
+   async signIn(signInUser: SignInUser): Promise<any> {
       return await signIn({
-        username: signing_user.email, 
-        password: signing_user.password,
+        username: signInUser.email, 
+        password: signInUser.password,
       })
    }
 
@@ -70,7 +72,14 @@ export interface User {
   access_token: string;
 }
 
-export interface SigningUser {
+export interface SignUpUser {
   email: string;
-  password: string
+  password: string;
+  name: string;
+  number: string;
+}
+
+export interface SignInUser {
+  email: string;
+  password: string;
 }

@@ -1,0 +1,91 @@
+<div>
+    <div class="container">
+        <span class="mat-display-small">Sign Up</span>
+        <form class="signup-form" [formGroup]="signUpForm" (ngSubmit)="onSignUp()">
+            <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input
+                    matInput
+                    formControlName="firstName"
+                    required
+                />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Middle Name</mat-label>
+                <input
+                    matInput
+                    formControlName="middleName"
+                />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input
+                    matInput
+                    formControlName="lastName"
+                    required
+                />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>E-mail</mat-label>
+                <input
+                    matInput
+                    formControlName="email"
+                    required
+                />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input
+                    matInput
+                    formControlName="password"
+                    required
+                    [type]="hide() ? 'password' : 'text'"
+                />
+                <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="clickHide()"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide()"
+                >
+                    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            @if(signUpForm.get('password')?.hasError('passwordInvalid')) {
+                <mat-error>Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.</mat-error>
+            }
+            <mat-form-field>
+                <mat-label>Confirm Password</mat-label>
+                <input
+                    matInput
+                    formControlName="confirmPassword"
+                    required
+                    [type]="confirmHide() ? 'password' : 'text'"
+                />
+                <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="clickConfirmHide()"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="confirmHide()"
+                >
+                    <mat-icon>{{confirmHide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            @if (signUpForm.get('confirmPassword')?.touched && signUpForm.hasError('passwordMismatch')) {
+                <mat-error>Passwords Must Match</mat-error>
+            }
+            <mat-form-field>
+                <mat-label>Phone Number</mat-label>
+                <input
+                    matInput
+                    formControlName="number"
+                    required
+                />
+            </mat-form-field>
+            <button mat-flat-button type="submit">Sign Up</button>
+        </form>
+    </div>
+</div>

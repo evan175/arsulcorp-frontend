@@ -5,7 +5,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
-import { CognitoService, User, SigningUser } from '../cognito.service';
+import { CognitoService, User, SignInUser } from '../cognito.service';
 import { Router } from '@angular/router';
 import { error } from 'console';
 
@@ -32,7 +32,7 @@ export class LoginComponent {
 
   onLogin() {
     console.log('Logging in...')
-    this.cognitoService.signIn(this.loginForm.value as SigningUser).then(async (res) => {
+    this.cognitoService.signIn(this.loginForm.value as SignInUser).then(async (res) => {
       console.log('logged in')
       const tokens = await this.cognitoService.getTokens()
       const currUser = await this.cognitoService.getCurrentUserAttributes()
@@ -40,8 +40,9 @@ export class LoginComponent {
       this.router.navigateByUrl('home');
     }).catch((error) => {
       alert(error)
-    }).finally(() => {
-      this.loginForm.reset()
     })
+    
+    this.loginForm.reset()
+    console.log(this.loginForm.value)
   }
 }
