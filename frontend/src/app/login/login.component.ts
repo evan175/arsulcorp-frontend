@@ -6,14 +6,14 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
 import { CognitoService, User, SignInUser } from '../cognito.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { error } from 'console';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, ReactiveFormsModule,],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

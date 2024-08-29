@@ -33,7 +33,7 @@ export class ConfirmSignupComponent {
         username: this.email,
         confirmationCode: this.code as string
       }).then(async () => {
-        await autoSignIn().catch((error) => console.log(error))
+        await autoSignIn()
         console.log('Sign up confirmed')
         this.router.navigateByUrl('home')
       }).catch((error) => {

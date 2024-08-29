@@ -7,9 +7,12 @@
     margin-bottom: 50px;
   }
 
-  .login-form {
+  .login-form, .create-acc{
     display: flex;
     flex-direction: column;
     width: 400px;
+    padding: 10px;
   }
+
+  
   
