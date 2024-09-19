@@ -1,0 +1,44 @@
+<div class="container">
+    <mat-toolbar id="header">
+        <span class='mat-display-small'>Add listing</span>
+    </mat-toolbar>
+    <form class="form" [formGroup]="applicationForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input
+            matInput
+            formControlName="address"
+            required
+          />
+          @if (applicationForm.get('address')?.invalid) {
+            <mat-error>Address Required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <input
+            matInput
+            formControlName="description"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <input
+            matInput
+            formControlName="price"
+            required
+          />
+          @if (applicationForm.get('price')?.invalid) {
+            <mat-error>Price Required</mat-error>
+          }
+        </mat-form-field>
+        <input type="file" (change)="onFileSelect($event)" multiple accept="image/*" />
+        <div class="imgs">
+            @for(img of imgs;track $index){
+                <img [src]="img" alt="img preview" style="width: 200px; height: 200px; margin: 10px;" />
+                <mat-icon class="delete-icon" fontIcon="close" (click)="removeImg($index)">&#10060;</mat-icon>
+            }
+        </div>
+        <button mat-flat-button type="submit">Add Listing</button>
+      </form>
+</div>

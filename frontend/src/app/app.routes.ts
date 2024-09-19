@@ -9,6 +9,7 @@ import { adminGuard } from './admin.guard';
 import { TenantSubmissionsComponent } from './tenant-submissions/tenant-submissions.component';
 import { SignupComponent } from './signup/signup.component';
 import { ConfirmSignupComponent } from './confirm-signup/confirm-signup.component';
+import { AddListingComponent } from './add-listing/add-listing.component';
 
 export const routes: Routes = [
     { 
@@ -51,6 +52,11 @@ export const routes: Routes = [
         path: 'applications',
         title: 'Applications',
         component: TenantSubmissionsComponent
+    },
+    {
+        path: 'add-listing',
+        title: 'Add Listing',
+        component: AddListingComponent
     },
     { 
         path: '',

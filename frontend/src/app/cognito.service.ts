@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Amplify } from 'aws-amplify'
-import { signUp, signIn, signOut, confirmSignIn, ConfirmSignInInput, getCurrentUser, fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth'
+import { signUp, signIn, signOut, confirmSignIn, ConfirmSignInInput, getCurrentUser, fetchUserAttributes, fetchAuthSession, confirmSignUp, autoSignIn, resendSignUpCode } from 'aws-amplify/auth'
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -51,6 +51,17 @@ export class CognitoService {
       return await confirmSignIn({
         challengeResponse: res
       })
+   }
+
+   async confirmSignUp(email: String, code: String) {
+      await confirmSignUp({
+        username: email as string,
+        confirmationCode: code as string
+      })
+   }
+
+   async resendSignUpCode(email: string) {
+      return await resendSignUpCode({username: email})
    }
 
    async getCurrentUser() {
