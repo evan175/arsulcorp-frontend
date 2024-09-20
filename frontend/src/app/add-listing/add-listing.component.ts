@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
-
+import { CognitoService } from '../cognito.service';
 
 @Component({
   selector: 'app-add-listing',
@@ -20,41 +20,49 @@ import {MatIconModule} from '@angular/material/icon';
   styleUrl: './add-listing.component.css'
 })
 export class AddListingComponent {
-  constructor(private formBuilder: FormBuilder){}
-  imgs: any = []
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private cognitoService: CognitoService, private router: Router){}
+  apiUrl = environment.apiUrl
 
-  applicationForm = this.formBuilder.group({
-    id: uuidv4(),
+  img_strs: any = []
+  img_files: File[] = []
+
+  listingForm = this.formBuilder.group({
+    houseId: uuidv4(),
     address: ['', Validators.required],
     description: [''],
     price: [0, Validators.required],
-    imgs: [[] as File[]]
+    imgIds: [[] as string[]]
   });
 
   onFileSelect(event: Event) {
     const input = event.target as HTMLInputElement
     if(input.files) {
       const fileArray: File[] = Array.from(input.files);
-      const currentImages = this.applicationForm.value.imgs || [];
-      const updatedImages = currentImages.concat(fileArray);
-      this.applicationForm.patchValue({imgs: updatedImages})
+      this.img_files = this.img_files.concat(fileArray)
 
+      const updatedImgIds = [...(this.listingForm.value.imgIds || [])];
       fileArray.forEach((file) => {
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          this.imgs.push(e.target.result); // Base64 string for image preview
+          this.img_strs.push(e.target.result); // Base64 string for image preview
+
         };
         reader.readAsDataURL(file);
+
+        const id = uuidv4();
+        updatedImgIds.push(id);
       });
+
+      this.listingForm.patchValue({imgIds: updatedImgIds})
     }
   }
 
   removeImg(index: number) {
-    this.imgs.splice(index, 1);
-
-    const currentImages = this.applicationForm.value.imgs || [];
-    currentImages.splice(index, 1);
-    this.applicationForm.patchValue({ imgs: currentImages });
+    this.img_strs.splice(index, 1);
+    this.img_files.splice(index, 1);
+    const currentIds = this.listingForm.value.imgIds || [];
+    currentIds.splice(index, 1);
+    this.listingForm.patchValue({imgIds: currentIds})
   }
 
   uploadImg(img: File) {
@@ -62,8 +70,18 @@ export class AddListingComponent {
     
   }
 
-  onSubmit() {
-    console.log(this.applicationForm.value)
+  async onSubmit() {
+    if(!this.listingForm.invalid) {
+      const formData = this.listingForm.value
+      const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
+      const headers = {'Authorization' : idToken as string}
+      this.http.put(`${this.apiUrl}/houses`, formData, {
+        headers: headers
+      }).subscribe(res => {
+        console.log(res)
+        this.router.navigateByUrl('home');
+      });
 
+    }
   }
 }
