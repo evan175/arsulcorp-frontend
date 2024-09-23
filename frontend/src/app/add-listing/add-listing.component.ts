@@ -65,8 +65,23 @@ export class AddListingComponent {
     this.listingForm.patchValue({imgIds: currentIds})
   }
 
-  uploadImg(img: File) {
-    const apiUrl = environment.apiUrl
+  async uploadImg(img: File, id: string) {
+    const params = {'imgId': id}
+    const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
+    const headers = {'Authorization' : idToken as string}
+    const s3Url = this.http.get(`${this.apiUrl}/imgs/img-url`, {
+      params: params,
+      headers: headers
+    }).subscribe(res => {
+      console.log(res.toString())
+      this.http.put(res.toString(), img, {
+        headers: {
+          'Content-Type': "multipart/form-data"
+        },
+      }).subscribe(res2 => {
+        console.log('Uploaded img to S3')
+      })
+    })
     
   }
 
@@ -77,9 +92,14 @@ export class AddListingComponent {
       const headers = {'Authorization' : idToken as string}
       this.http.put(`${this.apiUrl}/houses`, formData, {
         headers: headers
-      }).subscribe(res => {
+      }).subscribe(async res => {
         console.log(res)
-        this.router.navigateByUrl('home');
+        const imgIds: string[] = this.listingForm.value.imgIds as string[]
+        for(let i = 0; i < imgIds.length; i++){ 
+          await this.uploadImg(this.img_files[i], imgIds[i])
+        }
+
+        // this.router.navigateByUrl('home');
       });
 
     }
