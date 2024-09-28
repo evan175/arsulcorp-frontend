@@ -34,7 +34,7 @@ export class AdminComponent implements AfterViewInit{
 
   async loadData(){
     const apiUrl = environment.apiUrl
-    const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
+    const idToken = await this.cognitoService.getIdToken()
     const headers = {'Authorization' : idToken as string}
     this.http.get<Applicant[]>(`${apiUrl}/items`, {
       headers: headers

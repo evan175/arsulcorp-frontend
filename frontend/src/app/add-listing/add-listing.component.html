@@ -39,6 +39,9 @@
                 <mat-icon class="delete-icon" fontIcon="close" (click)="removeImg($index)"></mat-icon>
             }
         </div>
-        <button mat-flat-button type="submit">Add Listing</button>
+        <button mat-flat-button type="submit" [disabled]="loading">Add Listing</button>
+        @if(loading) {
+          <mat-spinner></mat-spinner>
+        }
       </form>
 </div>

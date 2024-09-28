@@ -10,5 +10,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './featured.component.css'
 })
 export class FeaturedComponent {
+  houses = {} // {houseid: [imgid, ...], ...}
 
+  
 }

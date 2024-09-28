@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="top-page">
+        <span class='mat-display-small'>Listings</span>
+    </div>
+    <div class="listings">
+    @for(house of houses; track house.address) {
+        <app-listing-card [house]="house" [carouselId]="house.id"></app-listing-card>
+    }
+    </div>
+</div>

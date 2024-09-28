@@ -12,8 +12,7 @@ export const adminGuard: CanActivateFn = async (route, state) => {
     return false
   }
 
-  let userSession = await cognitoService.getTokens()
-  let userGroups = userSession.tokens?.accessToken.payload['cognito:groups'] as Array<string>
+  let userGroups = await cognitoService.getUserGroups()
 
   if(userGroups.includes('Admins')) {
     return true

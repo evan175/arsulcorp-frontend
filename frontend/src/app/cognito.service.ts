@@ -72,15 +72,26 @@ export class CognitoService {
       return await fetchUserAttributes()
    }
 
-   async getTokens() {
-      return await fetchAuthSession()
+   async getIdToken() {
+      const tokens = await fetchAuthSession({ forceRefresh: true })
+      return tokens.tokens?.idToken?.toString()
+   }
+
+   async getAccessToken() {
+      const tokens = await fetchAuthSession()
+      return tokens.tokens?.accessToken.toString()
+   }
+
+   async getUserGroups() {
+      const tokens = await fetchAuthSession()
+      return tokens.tokens?.accessToken.payload['cognito:groups'] as Array<string>
    }
 }
 
 export interface User {
   email: string;
   name: string;
-  access_token: string;
+  id_token: string;
 }
 
 export interface SignUpUser {

@@ -34,9 +34,9 @@ export class LoginComponent {
     console.log('Logging in...')
     this.cognitoService.signIn(this.loginForm.value as SignInUser).then(async (res) => {
       console.log('logged in')
-      const tokens = await this.cognitoService.getTokens()
+      const id_token = await this.cognitoService.getIdToken()
       const currUser = await this.cognitoService.getCurrentUserAttributes()
-      this.cognitoService.currUser.set({email: currUser.email as string, name: currUser.name as string, access_token: tokens.tokens?.accessToken.toString() as string})
+      this.cognitoService.currUser.set({email: currUser.email as string, name: currUser.name as string, id_token: id_token as string})
       this.router.navigateByUrl('home');
     }).catch((error) => {
       alert(error)

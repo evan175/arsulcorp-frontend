@@ -20,10 +20,10 @@ export class AppComponent {
   async ngOnInit() {
     try {
       let userAttr = await this.cognitoService.getCurrentUserAttributes()
-      let token = localStorage.getItem('token')
-      this.cognitoService.currUser.set({email: userAttr.email as string, name: userAttr.name as string, access_token: token as string})
+      let id_token = await this.cognitoService.getIdToken()
+      this.cognitoService.currUser.set({email: userAttr.email as string, name: userAttr.name as string, id_token: id_token as string})
     } catch (err) {
-      console.log(err)
+      console.log('User not logged in')
     }
     
   }

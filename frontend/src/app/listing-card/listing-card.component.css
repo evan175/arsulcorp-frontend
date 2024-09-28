@@ -1,0 +1,17 @@
+.c-img {
+    object-fit: cover;
+    filter: brightness(0.5);
+    border-radius: 30px;
+    height: 100%;
+}
+
+.container {
+    max-width: 100%;
+    width: 390px;
+}
+
+.caption {
+    text-align: left;
+    line-height: .9;
+}
+

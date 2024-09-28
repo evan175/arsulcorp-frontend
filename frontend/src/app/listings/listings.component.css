@@ -1,0 +1,19 @@
+.container {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.top-page {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.listings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center
+}
+

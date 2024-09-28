@@ -10,6 +10,7 @@ import { TenantSubmissionsComponent } from './tenant-submissions/tenant-submissi
 import { SignupComponent } from './signup/signup.component';
 import { ConfirmSignupComponent } from './confirm-signup/confirm-signup.component';
 import { AddListingComponent } from './add-listing/add-listing.component';
+import { ListingsComponent } from './listings/listings.component';
 
 export const routes: Routes = [
     { 
@@ -57,6 +58,11 @@ export const routes: Routes = [
         path: 'add-listing',
         title: 'Add Listing',
         component: AddListingComponent
+    },
+    {
+        path: 'listings',
+        title: 'Listings',
+        component: ListingsComponent
     },
     { 
         path: '',

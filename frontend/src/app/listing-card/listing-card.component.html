@@ -1,0 +1,33 @@
+<div class="container">
+    <div [id]='carouselId' class="carousel slide carousel-fade">
+        <div class="carousel-indicators">
+            <button type="button" [attr.data-bs-target]="'#' + carouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            @for (img of imgUrlsSliced; track $index){
+                <button type="button" [attr.data-bs-target]="'#' + carouselId" [attr.data-bs-slide-to]="$index + 1" [attr.aria-label]="'Slide ' + ($index + 2)"></button>
+            }   
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item c-item active">
+                <img [src]="imgUrls[0]" class="d-block w-100 c-img" alt="...">
+            </div>
+            @for (url of imgUrlsSliced; track $index) {
+                <div class="carousel-item c-item">
+                    <img [src]="url" class="d-block w-100 c-img" alt="...">
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#' + carouselId" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#' + carouselId" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="caption">
+        <p><b>{{house.address}}</b></p>
+        <p>{{house.description}}</p>
+        <p>${{house.price}}</p> 
+    </div>
+</div>

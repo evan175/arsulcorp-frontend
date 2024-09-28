@@ -11,11 +11,14 @@ import { RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import { CognitoService } from '../cognito.service';
+import { switchMap } from 'rxjs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-add-listing',
   standalone: true,
-  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, FormsModule, MatIconModule],
+  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './add-listing.component.html',
   styleUrl: './add-listing.component.css'
 })
@@ -25,6 +28,8 @@ export class AddListingComponent {
 
   img_strs: any = []
   img_files: File[] = []
+
+  loading = false
 
   listingForm = this.formBuilder.group({
     houseId: uuidv4(),
@@ -65,42 +70,112 @@ export class AddListingComponent {
     this.listingForm.patchValue({imgIds: currentIds})
   }
 
+  resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+  
+      reader.onload = (e: any) => {
+        img.src = e.target.result;
+  
+        img.onload = () => {
+          let canvas = document.createElement('canvas');
+          let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  
+          let width = img.width;
+          let height = img.height;
+  
+          // Calculate the new dimensions while maintaining the aspect ratio
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height *= maxWidth / width));
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width *= maxHeight / height));
+              height = maxHeight;
+            }
+          }
+  
+          // Set the canvas dimensions to the resized image
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+  
+          // Convert the canvas image to a blob and return it as a File
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            } else {
+              reject(new Error('Image resize failed.'));
+            }
+          }, 'image/jpeg', 0.7); // 0.7 is the quality (scale from 0 to 1)
+        };
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  }
+
   async uploadImg(img: File, id: string) {
     const params = {'imgId': id}
-    const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
+    const idToken = await this.cognitoService.getIdToken()
     const headers = {'Authorization' : idToken as string}
-    const s3Url = this.http.get(`${this.apiUrl}/imgs/img-url`, {
-      params: params,
-      headers: headers
-    }).subscribe(res => {
-      console.log(res.toString())
-      this.http.put(res.toString(), img, {
-        headers: {
-          'Content-Type': "multipart/form-data"
-        },
-      }).subscribe(res2 => {
-        console.log('Uploaded img to S3')
-      })
-    })
+    //const resizedImg = await this.resizeImage(img, 1024, 1024);
     
+    return new Promise<void>((resolve, reject) => {
+      this.http.get<string>(`${this.apiUrl}/imgs/img-url`, {
+          params: params,
+          headers: headers,
+        })
+        .pipe(switchMap((signedUrl) =>
+            this.http.put(signedUrl, img, {
+              headers: {
+                'Content-Type': 'image/jpeg',
+              },
+            })
+          )
+        )
+        .subscribe({
+          next: () => {
+            console.log('Uploaded img to S3');
+            resolve();
+          },
+          error: (error) => {
+            console.error('Error uploading image', error);
+            reject(error);
+          },
+        });
+    });
   }
 
   async onSubmit() {
     if(!this.listingForm.invalid) {
+      this.loading = true
       const formData = this.listingForm.value
-      const idToken = (await this.cognitoService.getTokens()).tokens?.idToken?.toString()
+      const idToken = await this.cognitoService.getIdToken()
       const headers = {'Authorization' : idToken as string}
+  
       this.http.put(`${this.apiUrl}/houses`, formData, {
-        headers: headers
-      }).subscribe(async res => {
-        console.log(res)
-        const imgIds: string[] = this.listingForm.value.imgIds as string[]
-        for(let i = 0; i < imgIds.length; i++){ 
-          await this.uploadImg(this.img_files[i], imgIds[i])
-        }
-
-        // this.router.navigateByUrl('home');
-      });
+          headers: headers,
+        })
+        .pipe(switchMap(async (res) => {
+            console.log(res);
+            const imgIds: string[] = this.listingForm.value.imgIds as string[];
+            // Parallelize image uploads
+            await Promise.all(imgIds.map((id, i) => this.uploadImg(this.img_files[i], id)));
+            return res;
+          })
+        )
+        .subscribe({
+          next: (res) => {
+            this.router.navigateByUrl('/');
+          },
+          error: (error) => {
+            console.error('Error submitting form', error);
+          },
+        });
 
     }
   }
