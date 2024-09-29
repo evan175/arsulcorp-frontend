@@ -13,12 +13,12 @@ import {MatIconModule} from '@angular/material/icon';
 import { CognitoService } from '../cognito.service';
 import { switchMap } from 'rxjs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import {MatSelectModule} from '@angular/material/select';
 
 @Component({
   selector: 'app-add-listing',
   standalone: true,
-  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule],
   templateUrl: './add-listing.component.html',
   styleUrl: './add-listing.component.css'
 })
@@ -36,6 +36,7 @@ export class AddListingComponent {
     address: ['', Validators.required],
     description: [''],
     price: [0, Validators.required],
+    featured: [false],
     imgIds: [[] as string[]]
   });
 
@@ -122,7 +123,7 @@ export class AddListingComponent {
     const params = {'imgId': id}
     const idToken = await this.cognitoService.getIdToken()
     const headers = {'Authorization' : idToken as string}
-    //const resizedImg = await this.resizeImage(img, 1024, 1024);
+    const resizedImg = await this.resizeImage(img, 1024, 1024);
     
     return new Promise<void>((resolve, reject) => {
       this.http.get<string>(`${this.apiUrl}/imgs/img-url`, {
@@ -130,7 +131,7 @@ export class AddListingComponent {
           headers: headers,
         })
         .pipe(switchMap((signedUrl) =>
-            this.http.put(signedUrl, img, {
+            this.http.put(signedUrl, resizedImg, {
               headers: {
                 'Content-Type': 'image/jpeg',
               },

@@ -2,31 +2,33 @@
     <div id='myCarousel'class="carousel slide carousel-fade">
       <div class="carousel-indicators">
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            @for (house of slicedHouses; track $index){
+              <button type="button" data-bs-target="#myCarousel" [attr.data-bs-slide-to]="$index + 1" [attr.aria-label]="'Slide ' + ($index + 2)"></button>
+          } 
       </div>
       <div class="carousel-inner">
-        <div class="carousel-item c-item active">
-          <img src="..\..\..\house1.jpg" class="d-block w-100 c-img" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Example Address 1</h5>
-            <p>4 Bedrooms | $300</p>
+        @if(houses.length > 0){
+          <div class="carousel-item c-item active">
+            @if(houses[0].imgUrls.length){
+              <img [src]="houses[0]['imgUrls'][0]" class="d-block w-100 c-img" alt="...">
+            }
+            <div class="carousel-caption d-none d-md-block">
+              <h5>{{houses[0]['address']}}</h5>
+              <p>{{houses[0]['description']}} | ${{houses[0]['price']}}</p>
+            </div>
           </div>
-        </div>
-        <div class="carousel-item c-item">
-          <img src="..\..\..\house2.jpg" class="d-block w-100 c-img" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Example Address 2</h5>
-            <p>2 Bedrooms | $200</p>
-          </div>
-        </div>
-        <div class="carousel-item c-item">
-          <img src="..\..\..\house3.jpg" class="d-block w-100 c-img" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Example Address 3</h5>
-            <p>3 Bedrooms | $270</p>
-          </div>
-        </div>
+          @for (house of slicedHouses; track $index) {
+            <div class="carousel-item c-item">
+              @if(houses[0].imgUrls.length){
+                <img [src]="house['imgUrls'][0]" class="d-block w-100 c-img" alt="...">
+              }
+              <div class="carousel-caption d-none d-md-block">
+                <h5>{{house['address']}}</h5>
+                <p>{{house['description']}} | ${{house['price']}}</p>
+              </div>
+            </div>
+          }
+        }
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>

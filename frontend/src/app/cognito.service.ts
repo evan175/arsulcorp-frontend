@@ -19,17 +19,22 @@ export class CognitoService {
    currUser = signal<User | undefined | null>(undefined)
 
    async signUp(signUpUser: SignUpUser): Promise<any> {
-      return await signUp({ 
-        username: signUpUser.email,
-        password: signUpUser.password,
-        options: {
-          userAttributes: {
-            email: signUpUser.email,
-            name: signUpUser.name,
-            phone_number: signUpUser.number
+      try{
+        return await signUp({ 
+          username: signUpUser.email,
+          password: signUpUser.password,
+          options: {
+            userAttributes: {
+              email: signUpUser.email,
+              name: signUpUser.name,
+              phone_number: signUpUser.number
+            }
           }
-        }
-      })
+        })
+      } catch (err) {
+        console.error(err)
+        throw err;
+      }
    }
 
    async signOut() {
@@ -37,54 +42,115 @@ export class CognitoService {
         await signOut();
       } catch (err) {
         console.log(err)
+        throw err;
       }
    }
 
    async signIn(signInUser: SignInUser): Promise<any> {
+    try {
       return await signIn({
         username: signInUser.email, 
         password: signInUser.password,
       })
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
    }
 
    async confirmSignIn(res: string): Promise<any> {
-      return await confirmSignIn({
-        challengeResponse: res
-      })
+      try {
+        return await confirmSignIn({
+          challengeResponse: res
+        })
+      } catch (err) {
+        console.log(err)
+        throw err;
+      }
    }
 
    async confirmSignUp(email: String, code: String) {
-      await confirmSignUp({
-        username: email as string,
-        confirmationCode: code as string
-      })
+      try {
+          await confirmSignUp({
+            username: email as string,
+            confirmationCode: code as string
+          })
+      } catch (err) {
+          console.error(err)
+          throw err;
+      }
+
    }
 
    async resendSignUpCode(email: string) {
-      return await resendSignUpCode({username: email})
+      try {
+        return await resendSignUpCode({username: email})
+      } catch (err) {
+        console.error(err)
+        throw err; 
+      }
    }
 
    async getCurrentUser() {
-      return await getCurrentUser()
+      try {
+        return await getCurrentUser()
+      } catch (err) {
+        console.error(err)
+        throw err;
+      }
+
+      
    }
 
    async getCurrentUserAttributes() {
-      return await fetchUserAttributes()
+      try {
+        return await fetchUserAttributes()
+      } catch (err) {
+        console.error(err)
+        throw err;
+      }
+      
+   }
+
+   async fetchSession() {
+      try {
+        await fetchAuthSession({ forceRefresh: true })
+      } catch (err) {
+        console.error(err)
+        throw err
+      }
    }
 
    async getIdToken() {
-      const tokens = await fetchAuthSession({ forceRefresh: true })
-      return tokens.tokens?.idToken?.toString()
+      try {
+        const tokens = await fetchAuthSession({ forceRefresh: true })
+        return tokens.tokens?.idToken?.toString()
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+      
+      
    }
 
    async getAccessToken() {
-      const tokens = await fetchAuthSession()
-      return tokens.tokens?.accessToken.toString()
+      try {
+        const tokens = await fetchAuthSession()
+        return tokens.tokens?.accessToken.toString()
+      } catch (err) {
+        console.error(err)
+        throw err;
+      }
    }
 
    async getUserGroups() {
-      const tokens = await fetchAuthSession()
-      return tokens.tokens?.accessToken.payload['cognito:groups'] as Array<string>
+      try {
+        const tokens = await fetchAuthSession()
+        return tokens.tokens?.accessToken.payload['cognito:groups'] as Array<string>
+      } catch (err) {
+        console.error(err)
+        throw err
+      }
    }
 }
 

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ListingCardComponent } from '../listing-card/listing-card.component';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { CognitoService } from '../cognito.service';
 import { House } from '../listing-card/listing-card.component';
 
 @Component({
@@ -13,11 +12,11 @@ import { House } from '../listing-card/listing-card.component';
   styleUrl: './listings.component.css'
 })
 export class ListingsComponent {
-  constructor(private http: HttpClient, private cognitoService: CognitoService){}
+  constructor(private http: HttpClient){}
 
   s3Url = environment.s3Url
   apiUrl = environment.apiUrl
-  houses: House[] = []
+  houses: House[] = [] // [{address: 'hdad', ..., imgUrls: ['adasdasd', 'asdasd']}, {...}]
 
   async loadData(){
     this.http.get(`${this.apiUrl}/houses`
@@ -26,10 +25,8 @@ export class ListingsComponent {
     })
   }
 
-  //CONVERT houses.imgIds to imgUrls from env file s3url, using map maybe?
-
-  ngOnInit() {
-    this.loadData()
+  async ngOnInit() {
+    await this.loadData()
   }
 
 

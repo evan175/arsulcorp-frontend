@@ -32,6 +32,13 @@
             <mat-error>Price Required</mat-error>
           }
         </mat-form-field>
+        <mat-form-field>
+          <mat-label>Feature House?</mat-label>
+          <mat-select formControlName="featured">
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
         <input type="file" (change)="onFileSelect($event)" multiple accept="image/*" />
         <div class="imgs">
             @for(img of img_strs;track $index){

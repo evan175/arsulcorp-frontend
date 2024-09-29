@@ -3,7 +3,7 @@
         <span class='mat-display-small'>Listings</span>
     </div>
     <div class="listings">
-    @for(house of houses; track house.address) {
+    @for(house of houses; track house.id) {
         <app-listing-card [house]="house" [carouselId]="house.id"></app-listing-card>
     }
     </div>

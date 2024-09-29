@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, Router } from '@angular/router';
-import { CognitoService } from '../cognito.service';
+import { CognitoService, User } from '../cognito.service';
 import {MatMenuModule} from '@angular/material/menu';
 
 
@@ -15,6 +15,18 @@ import {MatMenuModule} from '@angular/material/menu';
 })
 export class HeaderComponent {
   constructor(public cognitoService: CognitoService, private router: Router) {}
+  isAdmin = false
+  currUser: User | null | undefined = null
+
+  async loadUser() {
+    const groups = await this.cognitoService.getUserGroups()
+    this.isAdmin = groups.includes('Admins')
+    this.currUser = this.cognitoService.currUser()
+  }
+
+  async ngOnInit() {
+    await this.loadUser()
+  }
 
   onLogOut() {
     console.log('logging out...')

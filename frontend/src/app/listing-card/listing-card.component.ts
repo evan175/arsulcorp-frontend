@@ -25,6 +25,7 @@ export interface House {
   id: string,
   address: string,
   description: string,
-  price: number
+  price: number,
+  featured: boolean,
   imgUrls: string[]
 }
