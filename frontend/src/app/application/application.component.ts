@@ -10,20 +10,23 @@ import { environment } from '../../environments/environment';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
-
-
+import {MatSelectModule} from '@angular/material/select';
+import { House } from '../listing-card/listing-card.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-application',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, RouterLink, MatSelectModule],
   templateUrl: './application.component.html',
   styleUrl: './application.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @Injectable({providedIn: 'root'})
 export class ApplicationComponent {
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
+
+  apiUrl = environment.apiUrl
 
   applicationForm = this.formBuilder.group({
     id: uuidv4(),
@@ -32,13 +35,26 @@ export class ApplicationComponent {
     lastName: ['', Validators.required],
     number: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
+    houseAddress: ['', [Validators.required]]
   });
+
+  houses: House[] = [] as House[]
+  selectedAddress: string | null = ''
+
+  ngOnInit() {
+    this.http.get(`${this.apiUrl}/houses`
+    ).subscribe(res => {
+      this.houses = res as House[]
+    })
+
+    this.selectedAddress = this.route.snapshot.paramMap.get('address')
+    this.applicationForm.get('houseAddress')?.setValue(this.selectedAddress)
+  }
 
   onSubmit(){
     if(!this.applicationForm.invalid){
-      const apiUrl = environment.apiUrl
       const formData = this.applicationForm.value
-      this.http.put(`${apiUrl}/items`, formData).subscribe(res => {
+      this.http.put(`${this.apiUrl}/items`, formData).subscribe(res => {
         console.log(res)
         this.router.navigateByUrl('app-submitted');
       });

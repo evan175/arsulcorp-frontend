@@ -4,7 +4,9 @@
     </div>
     <div class="listings">
     @for(house of houses; track house.id) {
-        <app-listing-card [house]="house" [carouselId]="house.id"></app-listing-card>
+        <a (click)="navToListing(house['id'])" class="card">
+            <app-listing-card [house]="house" [carouselId]="house.id"></app-listing-card>
+        </a>
     }
     </div>
 </div>

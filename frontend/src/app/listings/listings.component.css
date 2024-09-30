@@ -17,3 +17,8 @@
   justify-content:center
 }
 
+.card {
+  cursor: pointer;
+  background-color: inherit;
+}
+

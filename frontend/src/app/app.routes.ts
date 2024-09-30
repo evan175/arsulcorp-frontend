@@ -11,6 +11,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ConfirmSignupComponent } from './confirm-signup/confirm-signup.component';
 import { AddListingComponent } from './add-listing/add-listing.component';
 import { ListingsComponent } from './listings/listings.component';
+import { ListingComponent } from './listing/listing.component';
 
 export const routes: Routes = [
     { 
@@ -20,6 +21,11 @@ export const routes: Routes = [
     },
     {
         path: 'apply',
+        title: 'Apply',
+        component: ApplicationComponent
+    },
+    {
+        path: 'apply/:address',
         title: 'Apply',
         component: ApplicationComponent
     },    
@@ -63,6 +69,11 @@ export const routes: Routes = [
         path: 'listings',
         title: 'Listings',
         component: ListingsComponent
+    },
+    {
+        path: 'listing/:id',
+        title: `Listing`,
+        component: ListingComponent
     },
     { 
         path: '',

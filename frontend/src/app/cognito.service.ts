@@ -16,6 +16,23 @@ export class CognitoService {
     })
    }
 
+   private initialized = false;
+
+   async init() {
+      if(!this.initialized){
+        try {
+          await this.fetchSession()
+          let userAttr = await this.getCurrentUserAttributes()
+          let id_token = await this.getIdToken()
+          this.currUser.set({email: userAttr.email as string, name: userAttr.name as string, id_token: id_token as string})
+          console.log('User logged in')
+          this.initialized = true;
+        } catch (err) {
+          console.log('User not logged in')
+        }
+      }
+   }
+
    currUser = signal<User | undefined | null>(undefined)
 
    async signUp(signUpUser: SignUpUser): Promise<any> {
@@ -51,6 +68,10 @@ export class CognitoService {
       return await signIn({
         username: signInUser.email, 
         password: signInUser.password,
+      }).then(async res => {
+        const id_token = await this.getIdToken()
+        const currUser = await this.getCurrentUserAttributes()
+        this.currUser.set({email: currUser.email as string, name: currUser.name as string, id_token: id_token as string})
       })
     } catch (err) {
       console.error(err)

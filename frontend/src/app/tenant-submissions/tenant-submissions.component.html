@@ -1,7 +1,10 @@
 <div>
     <div class='container'>
         <span>Submitted Applications</span>
-    
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input matInput [(ngModel)]="filterStr"/>
+        </mat-form-field>
         <table mat-table>
             <ng-container matColumnDef="houseAddress">
                 <th mat-header-cell *matHeaderCellDef> House Address </th>

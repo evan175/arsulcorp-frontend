@@ -56,11 +56,19 @@
           placeholder="888-888-8888"
           matInput
           formControlName="number"
-          required=
+          required
         />
         @if (applicationForm.get('number')?.invalid) {
           <mat-error>Phone Number Required</mat-error>
         }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>House Address</mat-label>
+        <mat-select formControlName="houseAddress" [(value)]="selectedAddress" required>
+          @for(house of houses; track house.id) {
+            <mat-option [value]="house['address']">{{house['address']}}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
       <button mat-flat-button type="submit">Submit</button>
     </form>

@@ -86,7 +86,7 @@ export class AddListingComponent {
           let width = img.width;
           let height = img.height;
   
-          // Calculate the new dimensions while maintaining the aspect ratio
+          //calculate the new dimensions while maintaining the aspect ratio
           if (width > height) {
             if (width > maxWidth) {
               height = Math.round((height *= maxWidth / width));
@@ -99,19 +99,17 @@ export class AddListingComponent {
             }
           }
   
-          // Set the canvas dimensions to the resized image
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
   
-          // Convert the canvas image to a blob and return it as a File
           canvas.toBlob((blob) => {
             if (blob) {
               resolve(new File([blob], file.name, { type: 'image/jpeg' }));
             } else {
               reject(new Error('Image resize failed.'));
             }
-          }, 'image/jpeg', 0.7); // 0.7 is the quality (scale from 0 to 1)
+          }, 'image/jpeg', 0.7);
         };
       };
   
@@ -164,7 +162,7 @@ export class AddListingComponent {
         .pipe(switchMap(async (res) => {
             console.log(res);
             const imgIds: string[] = this.listingForm.value.imgIds as string[];
-            // Parallelize image uploads
+            //concurrent image uploads
             await Promise.all(imgIds.map((id, i) => this.uploadImg(this.img_files[i], id)));
             return res;
           })

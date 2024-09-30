@@ -1,1 +1,16 @@
-<p>listing works!</p>
+<div class="container">
+    <mat-toolbar id="header">
+        <span class='mat-headline-medium'>{{house['description']}}</span>
+        <a (click)="navToApply(house['address'])" class="apply">
+            <mat-icon class="open-icon" fontIcon="open_in_new"></mat-icon>Apply For This Listing
+        </a>
+    </mat-toolbar>
+    <div class="imgs">
+        @for(img of house['imgUrls'];track $index){
+            <img [src]="img" alt="img preview" />
+        }
+    </div>
+    <div class="bottom">
+        <span class="mat-title-large">{{house['address']}} | ${{house['price']}}</span>
+    </div>
+</div>

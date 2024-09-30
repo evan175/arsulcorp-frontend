@@ -1,0 +1,27 @@
+.container {
+    margin-left: 150px;    
+}
+
+img {
+    border-radius: 8px;
+    width: 270px; 
+    height: 270px; 
+    margin: 10px;
+}
+
+#header {
+    justify-content: space-between;
+}
+
+.open-icon {
+    margin-right: 10px;
+}
+
+.bottom {
+    margin-top: 12px;
+}
+
+a {
+    color: white;
+    cursor: pointer;
+}
