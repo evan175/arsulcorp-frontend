@@ -1,9 +1,13 @@
 {
   "routes": [
+    "/add-listing",
     "/admin",
     "/app-submitted",
     "/apply",
     "/home",
-    "/login"
+    "/listings",
+    "/login",
+    "/my-applications",
+    "/signup"
   ]
 }

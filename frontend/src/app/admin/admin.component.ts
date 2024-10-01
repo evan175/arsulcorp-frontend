@@ -20,7 +20,7 @@ import { CognitoService } from '../cognito.service';
 export class AdminComponent implements AfterViewInit{
   constructor(private http: HttpClient, private pdf: PdfService, private cognitoService: CognitoService){}
 
-  displayedColumns: string[] = ['id', 'firstName', 'middleName', 'lastName', 'email', 'number', 'houseAddress'];
+  displayedColumns: string[] = ['id', 'firstName', 'middleName', 'lastName', 'email', 'number', 'houseAddress', 'dateSubmitted'];
   dataSource = new MatTableDataSource<Applicant>();
   private _filterStr = ''
 
@@ -65,4 +65,6 @@ export interface Applicant {
   last_name: string;
   email: string;
   phone_num: string;
+  address: string;
+  date_submitted: string;
 }

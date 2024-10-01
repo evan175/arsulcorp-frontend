@@ -56,14 +56,15 @@ export const routes: Routes = [
         component: ConfirmSignupComponent
     },
     {
-        path: 'applications',
-        title: 'Applications',
+        path: 'my-applications',
+        title: 'My Applications',
         component: TenantSubmissionsComponent
     },
     {
         path: 'add-listing',
         title: 'Add Listing',
-        component: AddListingComponent
+        component: AddListingComponent,
+        canActivate: [adminGuard]
     },
     {
         path: 'listings',

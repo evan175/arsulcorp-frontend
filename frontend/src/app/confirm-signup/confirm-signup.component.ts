@@ -30,7 +30,7 @@ export class ConfirmSignupComponent {
   async onSubmit() {
     if(this.code){
       console.log('Confirming sign up')
-      await this.cognitoService.confirmSignUp(this.email, this.code).then(async () => {
+      await this.cognitoService.confirmSignUp(this.email, this.code).then(() => {
         console.log('Sign up confirmed')
         this.router.navigateByUrl('home')
       }).catch((error) => {
@@ -41,7 +41,7 @@ export class ConfirmSignupComponent {
 
   async resendCode() {
     console.log("Resending Code")
-    await this.cognitoService.resendSignUpCode(this.email).then(async () => {
+    await this.cognitoService.resendSignUpCode(this.email).then(() => {
       console.log("Code resent to email")
       this.snackBar.open("Code resent to email", "Close")
     }).catch((error) => {

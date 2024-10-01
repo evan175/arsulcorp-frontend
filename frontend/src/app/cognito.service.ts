@@ -2,11 +2,13 @@ import { Injectable, signal } from '@angular/core';
 import { Amplify } from 'aws-amplify'
 import { signUp, signIn, signOut, confirmSignIn, ConfirmSignInInput, getCurrentUser, fetchUserAttributes, fetchAuthSession, confirmSignUp, autoSignIn, resendSignUpCode } from 'aws-amplify/auth'
 import { environment } from '../environments/environment';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CognitoService {
+  
 
   constructor() {
     Amplify.configure({
@@ -15,164 +17,143 @@ export class CognitoService {
       }
     })
    }
+ 
+  isLoggedInSubject = new BehaviorSubject(false);
+  currLoggedIn = this.isLoggedInSubject.asObservable();
 
-   private initialized = false;
-
-   async init() {
-      if(!this.initialized){
-        try {
-          await this.fetchSession()
-          let userAttr = await this.getCurrentUserAttributes()
-          let id_token = await this.getIdToken()
-          this.currUser.set({email: userAttr.email as string, name: userAttr.name as string, id_token: id_token as string})
-          console.log('User logged in')
-          this.initialized = true;
-        } catch (err) {
-          console.log('User not logged in')
-        }
-      }
-   }
-
-   currUser = signal<User | undefined | null>(undefined)
-
-   async signUp(signUpUser: SignUpUser): Promise<any> {
-      try{
-        return await signUp({ 
-          username: signUpUser.email,
-          password: signUpUser.password,
-          options: {
-            userAttributes: {
-              email: signUpUser.email,
-              name: signUpUser.name,
-              phone_number: signUpUser.number
-            }
+  signUp(signUpUser: SignUpUser): Promise<any> {
+    try{
+      return signUp({ 
+        username: signUpUser.email,
+        password: signUpUser.password,
+        options: {
+          userAttributes: {
+            email: signUpUser.email,
+            name: signUpUser.name,
+            phone_number: signUpUser.number
           }
-        })
-      } catch (err) {
-        console.error(err)
-        throw err;
-      }
-   }
-
-   async signOut() {
-      try {
-        await signOut();
-      } catch (err) {
-        console.log(err)
-        throw err;
-      }
-   }
-
-   async signIn(signInUser: SignInUser): Promise<any> {
-    try {
-      return await signIn({
-        username: signInUser.email, 
-        password: signInUser.password,
-      }).then(async res => {
-        const id_token = await this.getIdToken()
-        const currUser = await this.getCurrentUserAttributes()
-        this.currUser.set({email: currUser.email as string, name: currUser.name as string, id_token: id_token as string})
+        }
       })
     } catch (err) {
       console.error(err)
       throw err;
     }
-   }
+  }
 
-   async confirmSignIn(res: string): Promise<any> {
-      try {
-        return await confirmSignIn({
-          challengeResponse: res
-        })
-      } catch (err) {
-        console.log(err)
-        throw err;
-      }
-   }
+  async signOut() {
+    try {
+      const res = await signOut();
+      this.isLoggedInSubject.next(false);
+    } catch (err) {
+      console.log(err)
+      throw err;
+    }
+  }
 
-   async confirmSignUp(email: String, code: String) {
-      try {
-          await confirmSignUp({
-            username: email as string,
-            confirmationCode: code as string
-          })
-      } catch (err) {
-          console.error(err)
-          throw err;
-      }
+  async signIn(signInUser: SignInUser): Promise<any> {
+    try {
+      const res = await signIn({
+        username: signInUser.email,
+        password: signInUser.password,
+      });
+      this.isLoggedInSubject.next(true);
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
+  }
 
-   }
+  confirmSignIn(res: string): Promise<any> {
+    try {
+      return confirmSignIn({
+        challengeResponse: res
+      })
+    } catch (err) {
+      console.log(err)
+      throw err;
+    }
+  }
 
-   async resendSignUpCode(email: string) {
-      try {
-        return await resendSignUpCode({username: email})
-      } catch (err) {
-        console.error(err)
-        throw err; 
-      }
-   }
+  confirmSignUp(email: String, code: String): Promise<any> {
+    try {
+      return confirmSignUp({
+        username: email as string,
+        confirmationCode: code as string
+      })
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
+  }
 
-   async getCurrentUser() {
-      try {
-        return await getCurrentUser()
-      } catch (err) {
-        console.error(err)
-        throw err;
-      }
+  resendSignUpCode(email: string): Promise<any> {
+    try {
+      return resendSignUpCode({username: email})
+    } catch (err) {
+      console.error(err)
+      throw err; 
+    }
+  }
 
-      
-   }
+  getCurrentUser(): Promise<any> {
+    try {
+      return getCurrentUser()
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }      
+  }
 
-   async getCurrentUserAttributes() {
-      try {
-        return await fetchUserAttributes()
-      } catch (err) {
-        console.error(err)
-        throw err;
-      }
-      
-   }
+  getCurrentUserAttributes(): Promise<any> {
+    try {
+      return  fetchUserAttributes()
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
+    
+  }
 
-   async fetchSession() {
-      try {
-        await fetchAuthSession({ forceRefresh: true })
-      } catch (err) {
-        console.error(err)
-        throw err
-      }
-   }
+  fetchSession(): Promise<any> {
+    try {
+        return fetchAuthSession({ forceRefresh: true })
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
 
-   async getIdToken() {
-      try {
-        const tokens = await fetchAuthSession({ forceRefresh: true })
-        return tokens.tokens?.idToken?.toString()
-      } catch (err) {
-        console.error(err);
-        throw err;
-      }
-      
-      
-   }
+  async getIdToken() {
+    try {
+      const tokens = await fetchAuthSession()
+      return tokens.tokens?.idToken?.toString()
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+    
+    
+  }
 
-   async getAccessToken() {
-      try {
-        const tokens = await fetchAuthSession()
-        return tokens.tokens?.accessToken.toString()
-      } catch (err) {
-        console.error(err)
-        throw err;
-      }
-   }
+  async getAccessToken() {
+    try {
+      const tokens = await fetchAuthSession()
+      return tokens.tokens?.accessToken.toString()
+    } catch (err) {
+      console.error(err)
+      throw err;
+    }
+  }
 
-   async getUserGroups() {
-      try {
-        const tokens = await fetchAuthSession()
-        return tokens.tokens?.accessToken.payload['cognito:groups'] as Array<string>
-      } catch (err) {
-        console.error(err)
-        throw err
-      }
-   }
+  async getUserGroups() {
+    try {
+      const tokens = await fetchAuthSession()
+      return tokens.tokens?.accessToken.payload['cognito:groups'] as Array<string>
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
 }
 
 export interface User {

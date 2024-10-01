@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, Router } from '@angular/router';
 import { CognitoService, User } from '../cognito.service';
 import {MatMenuModule} from '@angular/material/menu';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,27 +15,47 @@ import {MatMenuModule} from '@angular/material/menu';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  constructor(public cognitoService: CognitoService, private router: Router) {}
+  constructor(private cognitoService: CognitoService, private router: Router, private cdr: ChangeDetectorRef) {}
+  loggedIn = false;
   isAdmin = false
-  currUser: User | null | undefined = null
+  userAtr: any = {}
+  authSubscription: Subscription | undefined 
 
   async loadUser() {
-    const groups = await this.cognitoService.getUserGroups()
-    this.isAdmin = groups.includes('Admins')
-    this.currUser = this.cognitoService.currUser()
+    if(this.loggedIn) {
+      this.userAtr = await this.cognitoService.getCurrentUserAttributes()
+      const groups = await this.cognitoService.getUserGroups()
+      this.isAdmin = groups.includes('Admins')
+    }
+    else {
+      this.isAdmin = false
+    }
+    this.cdr.detectChanges()
   }
 
   async ngOnInit() {
-    await this.loadUser()
+    let usr = await this.cognitoService.getCurrentUser()
+    this.loggedIn = usr ? true : false
+    this.cognitoService.isLoggedInSubject.next(this.loggedIn)
+    this.loadUser()
+    this.authSubscription = this.cognitoService.currLoggedIn.subscribe((loggedIn) => {
+      console.log('here')
+      this.loggedIn = loggedIn
+      this.loadUser()
+    })
   }
 
-  onLogOut() {
+  async onLogOut() {
     console.log('logging out...')
     this.cognitoService.signOut().then(() => {
-      this.cognitoService.currUser.set(null)
       console.log('logged out')
       this.router.navigateByUrl('/home')
-      
     }).catch((error) => console.log(error))
+  }
+
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 }

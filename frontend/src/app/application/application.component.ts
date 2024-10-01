@@ -35,7 +35,8 @@ export class ApplicationComponent {
     lastName: ['', Validators.required],
     number: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    houseAddress: ['', [Validators.required]]
+    houseAddress: ['', [Validators.required]],
+    dateSubmitted: ['']
   });
 
   houses: House[] = [] as House[]
@@ -53,6 +54,13 @@ export class ApplicationComponent {
 
   onSubmit(){
     if(!this.applicationForm.invalid){
+      let date = new Date()
+      let formattedDate = date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })
+      this.applicationForm.get('dateSubmitted')?.setValue(formattedDate)
       const formData = this.applicationForm.value
       this.http.put(`${this.apiUrl}/items`, formData).subscribe(res => {
         console.log(res)

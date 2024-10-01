@@ -18,7 +18,7 @@ export class FeaturedComponent {
   houses: House[] = []
   slicedHouses: House[] = []
 
-  async loadData() {
+  public async loadData() {
     const apiUrl = environment.apiUrl
     this.http.get(`${apiUrl}/houses`
     ).subscribe(res => {
@@ -33,7 +33,7 @@ export class FeaturedComponent {
     })
   }
 
-  async ngOnInit() {
+  public async ngOnInit() {
     await this.loadData()
   }
   

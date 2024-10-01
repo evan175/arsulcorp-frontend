@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
 export class TenantSubmissionsComponent {
   constructor(private http: HttpClient, private pdf: PdfService, private cognitoService: CognitoService){}
 
-  displayedColumns: string[] = ['firstName', 'middleName', 'lastName', 'email', 'number', 'houseAddress'];
+  displayedColumns: string[] = ['firstName', 'middleName', 'lastName', 'email', 'number', 'houseAddress', 'dateSubmitted'];
   dataSource = new MatTableDataSource<Applicant>();
   private _filterStr = ''
 
@@ -38,12 +38,21 @@ export class TenantSubmissionsComponent {
     const apiUrl = environment.apiUrl
     const idToken = await this.cognitoService.getIdToken()
     const headers = {'Authorization' : idToken as string}
-    const email = this.cognitoService.currUser()?.email
-    this.http.get<Applicant[]>(`${apiUrl}/items`, {
+    let userAttr = await this.cognitoService.getCurrentUserAttributes()
+    const email = userAttr.email
+    this.http.get<Applicant[]>(`${apiUrl}/items/${email}`, {
       headers: headers
     }).subscribe(data => {
-      const flattenedData = data.flat();
-      this.dataSource.data = flattenedData;
+      this.dataSource.data = data;
     });
+    
+  }
+
+  public async ngOnInit() {
+    await this.loadData()
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 }

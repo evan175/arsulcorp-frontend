@@ -8,17 +8,24 @@
             <button mat-button routerLink="/listings">Listings</button>
             <button mat-button>Contact</button>
             <button mat-button>About</button>
-            @if(cognitoService.currUser() === null || cognitoService.currUser() === undefined){
+            @if(!loggedIn){
                 <button mat-flat-button routerLink="/login">Login</button>
             }
             @else if(isAdmin) {
-                <button mat-flat-button [mat-menu-trigger-for]="menu">{{cognitoService.currUser()?.name}}</button>
+                <button mat-flat-button [mat-menu-trigger-for]="menu">{{userAtr.name}}</button>
                 <mat-menu #menu="matMenu">
                     
                     <button mat-menu-item routerLink="/admin">Applications</button>
                     <button mat-menu-item routerLink='/add-listing'>Add Listing</button>
                     <button mat-menu-item (click)="onLogOut()">Sign out</button>
                     
+                </mat-menu>
+            }
+            @else {
+                <button mat-flat-button [mat-menu-trigger-for]="menu">{{userAtr.name}}</button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item routerLink="/my-applications">My Applications</button>
+                    <button mat-menu-item (click)="onLogOut()">Sign out</button>
                 </mat-menu>
             }
         </div>  

@@ -30,7 +30,7 @@ export class LoginComponent {
     this.hide.set(!this.hide());
   }
 
-  onLogin() {
+  async onLogin() {
     console.log('Logging in...')
     this.cognitoService.signIn(this.loginForm.value as SignInUser).then(async (res) => {
       console.log('logged in')
@@ -40,6 +40,5 @@ export class LoginComponent {
     })
     
     this.loginForm.reset()
-    console.log(this.loginForm.value)
   }
 }

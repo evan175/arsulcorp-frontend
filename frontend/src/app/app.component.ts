@@ -17,16 +17,4 @@ import { CognitoService } from './cognito.service';
 export class AppComponent {
   constructor(private cognitoService: CognitoService) {}
 
-  async ngOnInit() {
-    try {
-      await this.cognitoService.fetchSession()
-      let userAttr = await this.cognitoService.getCurrentUserAttributes()
-      let id_token = await this.cognitoService.getIdToken()
-      this.cognitoService.currUser.set({email: userAttr.email as string, name: userAttr.name as string, id_token: id_token as string})
-      console.log('User logged in')
-    } catch (err) {
-      console.log('User not logged in')
-    }
-    
-  }
 }

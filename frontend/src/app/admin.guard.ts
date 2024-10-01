@@ -7,7 +7,7 @@ export const adminGuard: CanActivateFn = async (route, state) => {
   const cognitoService = inject(CognitoService)
   const router = inject(Router)
 
-  if(cognitoService.currUser() == null || cognitoService.currUser() == undefined) {
+  if(!(await cognitoService.fetchSession())) {
     router.navigateByUrl('home');
     return false
   }
