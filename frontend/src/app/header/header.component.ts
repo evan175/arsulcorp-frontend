@@ -33,15 +33,21 @@ export class HeaderComponent {
   }
 
   async ngOnInit() {
-    let usr = await this.cognitoService.getCurrentUser()
-    this.loggedIn = usr ? true : false
-    this.cognitoService.isLoggedInSubject.next(this.loggedIn)
-    this.loadUser()
     this.authSubscription = this.cognitoService.currLoggedIn.subscribe((loggedIn) => {
-      console.log('here')
       this.loggedIn = loggedIn
       this.loadUser()
     })
+
+    try {
+      let usr = await this.cognitoService.getCurrentUser()
+      this.loggedIn = true
+    } catch {
+      this.loggedIn = false
+    }
+
+    console.log(this.loggedIn)
+
+    this.cognitoService.isLoggedInSubject.next(this.loggedIn)
   }
 
   async onLogOut() {

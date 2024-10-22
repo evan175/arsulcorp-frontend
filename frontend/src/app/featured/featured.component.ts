@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { House } from '../listing-card/listing-card.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-featured',
@@ -15,7 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './featured.component.css'
 })
 export class FeaturedComponent {
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private router: Router){}
 
   loading = true
 
@@ -40,6 +40,10 @@ export class FeaturedComponent {
   public async ngOnInit() {
     await this.loadData()
     this.loading = false
+  }
+
+  navToListing(id: string) {
+    this.router.navigate(['listing', id])
   }
   
 }
