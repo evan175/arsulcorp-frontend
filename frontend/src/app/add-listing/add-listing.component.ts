@@ -86,7 +86,6 @@ export class AddListingComponent {
           let width = img.width;
           let height = img.height;
   
-          //calculate the new dimensions while maintaining the aspect ratio
           if (width > height) {
             if (width > maxWidth) {
               height = Math.round((height *= maxWidth / width));

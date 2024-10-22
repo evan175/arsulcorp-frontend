@@ -70,7 +70,10 @@
           }
         </mat-select>
       </mat-form-field>
-      <button mat-flat-button type="submit">Submit</button>
+      <button mat-flat-button type="submit" [disabled]="loading">Submit</button>
+      @if(loading) {
+        <mat-spinner></mat-spinner>
+      }
     </form>
   </div>
 </div>

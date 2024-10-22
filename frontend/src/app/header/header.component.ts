@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  constructor(private cognitoService: CognitoService, private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(private cognitoService: CognitoService, private router: Router) {}
   loggedIn = false;
   isAdmin = false
   userAtr: any = {}
@@ -30,7 +30,6 @@ export class HeaderComponent {
     else {
       this.isAdmin = false
     }
-    this.cdr.detectChanges()
   }
 
   async ngOnInit() {

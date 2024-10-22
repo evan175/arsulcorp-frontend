@@ -13,11 +13,12 @@ import { RouterLink } from '@angular/router';
 import {MatSelectModule} from '@angular/material/select';
 import { House } from '../listing-card/listing-card.component';
 import { ActivatedRoute } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-application',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, RouterLink, MatSelectModule],
+  imports: [MatToolbarModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, RouterLink, MatSelectModule, MatProgressSpinnerModule],
   templateUrl: './application.component.html',
   styleUrl: './application.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +28,8 @@ export class ApplicationComponent {
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
 
   apiUrl = environment.apiUrl
+
+  loading = false
 
   applicationForm = this.formBuilder.group({
     id: uuidv4(),
@@ -54,6 +57,7 @@ export class ApplicationComponent {
 
   onSubmit(){
     if(!this.applicationForm.invalid){
+      this.loading = true
       let date = new Date()
       let formattedDate = date.toLocaleString('en-US', {
         month: 'short',
