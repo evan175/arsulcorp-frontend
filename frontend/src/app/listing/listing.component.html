@@ -2,8 +2,13 @@
     <mat-toolbar id="header">
         <span class='mat-headline-medium'>{{house['description']}}</span>
         <a (click)="navToApply(house['address'])" class="apply">
-            <mat-icon class="open-icon" fontIcon="open_in_new"></mat-icon>Apply For This Listing
+            <mat-icon class="icon" fontIcon="open_in_new"></mat-icon>Apply For This Listing
         </a>
+        @if(isAdmin){
+            <a (click)="deleteListing(house['id'])" class="delete">
+                <mat-icon class="icon" fontIcon="delete"></mat-icon>Delete This Listing
+            </a>
+        }
     </mat-toolbar>
     <div class="imgs">
         @for(img of house['imgUrls'];track $index){

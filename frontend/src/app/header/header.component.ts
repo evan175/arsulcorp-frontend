@@ -22,12 +22,11 @@ export class HeaderComponent {
   authSubscription: Subscription | undefined 
 
   async loadUser() {
-    if(this.loggedIn) {
+    try {
       this.userAtr = await this.cognitoService.getCurrentUserAttributes()
       const groups = await this.cognitoService.getUserGroups()
       this.isAdmin = groups.includes('Admins')
-    }
-    else {
+    } catch {
       this.isAdmin = false
     }
   }
@@ -44,8 +43,6 @@ export class HeaderComponent {
     } catch {
       this.loggedIn = false
     }
-
-    console.log(this.loggedIn)
 
     this.cognitoService.isLoggedInSubject.next(this.loggedIn)
   }

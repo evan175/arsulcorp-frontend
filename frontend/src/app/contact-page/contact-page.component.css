@@ -1,0 +1,5 @@
+.contacts {
+    display: flex;
+    flex-direction: column;
+    margin-left: 150px;
+}

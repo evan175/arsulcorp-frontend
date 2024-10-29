@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { CognitoService } from '../cognito.service';
 
 
 @Component({
@@ -18,22 +19,56 @@ import { Router } from '@angular/router';
   styleUrl: './listing.component.css'
 })
 export class ListingComponent {
-  constructor(private route: ActivatedRoute, private http: HttpClient, private title: Title, private router: Router) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private title: Title, private router: Router, private cognitoService: CognitoService) {}
+
+  apiUrl = environment.apiUrl
 
   houseId = ''
   house: House = {} as House
-  ngOnInit() {
+  loggedIn = false;
+  isAdmin = false
+
+  async loadUserGroups() {
+    try {
+      const groups = await this.cognitoService.getUserGroups()
+      this.isAdmin = groups.includes('Admins')
+    } catch {
+      this.isAdmin = false
+    }
+  }
+
+  async ngOnInit() {
     this.houseId = this.route.snapshot.paramMap.get('id') as string
-    const apiUrl = environment.apiUrl
-    this.http.get(`${apiUrl}/houses/${this.houseId}`
+    
+    this.http.get(`${this.apiUrl}/houses/${this.houseId}`
     ).subscribe(res => {
       this.house = res as House
       this.title.setTitle(this.house['address'])
     })
+
+    try {
+      let usr = await this.cognitoService.getCurrentUser()
+      this.loggedIn = true
+      await this.loadUserGroups()
+    } catch {
+      this.loggedIn = false
+    }
   }
 
   navToApply(address: string) {
     this.router.navigate(['apply', address])
+  }
+
+  async deleteListing(id: string) {
+    const idToken = await this.cognitoService.getIdToken()
+    const headers = {'Authorization' : idToken as string}
+
+    this.http.delete(`${this.apiUrl}/houses/${this.houseId}`, {
+        headers: headers,
+      }
+    ).subscribe(res => {
+      this.router.navigate(['home'])
+    })
   }
 
 }

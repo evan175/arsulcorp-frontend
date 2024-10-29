@@ -12,6 +12,7 @@ import { ConfirmSignupComponent } from './confirm-signup/confirm-signup.componen
 import { AddListingComponent } from './add-listing/add-listing.component';
 import { ListingsComponent } from './listings/listings.component';
 import { ListingComponent } from './listing/listing.component';
+import { ContactPageComponent } from './contact-page/contact-page.component';
 
 export const routes: Routes = [
     { 
@@ -75,6 +76,11 @@ export const routes: Routes = [
         path: 'listing/:id',
         title: `Listing`,
         component: ListingComponent
+    },
+    {
+        path: 'contact',
+        title: 'Contact',
+        component: ContactPageComponent
     },
     { 
         path: '',
