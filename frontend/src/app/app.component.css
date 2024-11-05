@@ -1,14 +1,17 @@
 app-footer {
-    height: 24px;
-    margin-top: -36px;
-    width: 100%;
-    bottom: 0;
+    min-height: 24px;
+    margin-top: auto;
+
 }
 
-.outer {
-    min-height: 100%;
-}
 
 .inner {
     padding-bottom: 36px;
+    flex: 1;
+} 
+
+.outer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
