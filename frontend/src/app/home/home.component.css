@@ -17,6 +17,7 @@
   margin: 0 auto;
   margin-top: 25px;
   max-width: 900px;
+  align-items: center;
 }
 
 .featured {

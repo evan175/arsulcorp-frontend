@@ -155,26 +155,19 @@ export class AddListingComponent {
       const idToken = await this.cognitoService.getIdToken()
       const headers = {'Authorization' : idToken as string}
   
-      this.http.put(`${this.apiUrl}/houses`, formData, {
-          headers: headers,
-        })
-        .pipe(switchMap(async (res) => {
-            console.log(res);
-            const imgIds: string[] = this.listingForm.value.imgIds as string[];
-            //concurrent image uploads
-            await Promise.all(imgIds.map((id, i) => this.uploadImg(this.img_files[i], id)));
-            return res;
-          })
-        )
-        .subscribe({
-          next: (res) => {
-            this.router.navigateByUrl('/');
-          },
-          error: (error) => {
-            console.error('Error submitting form', error);
-          },
-        });
-
+      this.http.put(`${this.apiUrl}/houses`, formData, { headers })
+      .subscribe({
+        next: async (res) => {
+          console.log(res);
+          const imgIds: string[] = this.listingForm.value.imgIds as string[];
+          //concurrent image uploads
+          await Promise.all(imgIds.map((id, i) => this.uploadImg(this.img_files[i], id)));
+          this.router.navigateByUrl('/');
+        },
+        error: (error) => {
+          console.error('Error submitting form', error);
+        }
+      });
     }
   }
 }

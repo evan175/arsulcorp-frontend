@@ -4,13 +4,31 @@
     max-width: 100%;
 }
 
-
+.middle, .menu {
+    display: none;
+}
 
 #header {
     justify-content: space-between;
+    width: 100%;
 }
 
 #home {
     text-decoration: none;
     color: white
+}
+
+.right {
+    display: flex;
+}
+
+
+@media screen and (max-width: 500px) {
+    .middle, .menu{
+        display: block;
+    }
+    
+    .header-items {
+        display: none;
+    }
 }
