@@ -2,6 +2,7 @@
     margin-left: 15px;
     margin-right: 15px;
     max-width: 100%;
+    overflow-x: auto;
 }
 
 table {

@@ -22,11 +22,10 @@ export class AdminComponent implements AfterViewInit{
 
   displayedColumns: string[] = ['id', 'firstName', 'middleName', 'lastName', 'email', 'number', 'houseAddress', 'dateSubmitted'];
   dataSource = new MatTableDataSource<Applicant>();
-  private _filterStr = ''
 
-  set filterStr(value: string) {
-    this._filterStr = value;
-    this.dataSource.filter = value.trim().toLowerCase();
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   @ViewChild(MatPaginator)

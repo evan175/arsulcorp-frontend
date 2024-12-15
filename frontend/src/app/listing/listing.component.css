@@ -1,16 +1,33 @@
 .container {
-    margin-left: 150px;    
+    max-width: 100%;
 }
 
 img {
     border-radius: 8px;
-    width: 270px; 
-    height: 270px; 
+    max-width: 270px; 
+    min-height: 270px; 
     margin: 10px;
 }
 
-#header {
-    justify-content: space-between;
+.imgs {
+    margin-top: 25px;
+}
+
+#header{
+    display: flex;
+    flex-wrap: wrap;
+    white-space: normal;  
+    height: auto;
+} 
+
+.header-item {
+    flex-grow: 1;
+    flex-basis: 200;
+}
+
+.bottom {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .icon {

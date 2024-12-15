@@ -1,8 +1,8 @@
 <div>
     <div class="container">
         <mat-form-field>
-            <mat-label>Search</mat-label>
-            <input matInput [(ngModel)]="filterStr"/>
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
         </mat-form-field>
         <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="id">

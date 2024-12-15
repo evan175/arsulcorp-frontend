@@ -20,5 +20,6 @@
 .card {
   cursor: pointer;
   background-color: inherit;
+  margin: 10px;
 }
 
