@@ -1,7 +1,7 @@
 <div class="container">
     <mat-toolbar id="header">
         <div class="description header-item">
-            <span>{{house['description']}} sad as esad asd asd asdsadsa dsadas dasd asd asd asd asd </span>
+            <span>{{house['description']}}</span>
         </div>
         @if(isAdmin){
             <a class="header-item" (click)="deleteListing(house['id'])" class="delete">
@@ -20,6 +20,6 @@
         }
     </div>
     <div class="bottom">
-        <span class="mat-title-large">{{house['address']}} | ${{house['price']}} sad as esad asd asd asdsadsa dsadas dasd asd asd asd asd</span>
+        <span class="mat-title-large">{{house['address']}} | ${{house['price']}}</span>
     </div>
 </div>
