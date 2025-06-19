@@ -24,7 +24,7 @@ import {MatSelectModule} from '@angular/material/select';
 })
 export class AddListingComponent {
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private cognitoService: CognitoService, private router: Router){}
-  apiUrl = environment.apiUrl
+  apiUrl = environment.testApiUrl;
 
   img_strs: any = []
   img_files: File[] = []

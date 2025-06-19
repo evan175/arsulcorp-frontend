@@ -21,7 +21,7 @@ import { CognitoService } from '../cognito.service';
 export class ListingComponent {
   constructor(private route: ActivatedRoute, private http: HttpClient, private title: Title, private router: Router, private cognitoService: CognitoService) {}
 
-  apiUrl = environment.apiUrl
+  apiUrl = environment.testApiUrl
 
   houseId = ''
   house: House = {} as House

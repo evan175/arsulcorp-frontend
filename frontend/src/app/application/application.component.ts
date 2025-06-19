@@ -27,7 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class ApplicationComponent {
   constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
 
-  apiUrl = environment.apiUrl
+  apiUrl = environment.testApiUrl;
 
   loading = false
 
@@ -46,9 +46,9 @@ export class ApplicationComponent {
   selectedAddress: string | null = ''
 
   ngOnInit() {
-    this.http.get(`${this.apiUrl}/houses`
+    this.http.get<{ statusCode: number; headers: any; body: string }>(`${this.apiUrl}/houses`
     ).subscribe(res => {
-      this.houses = res as House[]
+      this.houses = JSON.parse(res.body) as House[]
     })
 
     this.selectedAddress = this.route.snapshot.paramMap.get('address')

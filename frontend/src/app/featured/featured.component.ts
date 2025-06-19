@@ -23,10 +23,11 @@ export class FeaturedComponent {
   slicedHouses: House[] = []
 
   public async loadData() {
-    const apiUrl = environment.apiUrl
-    this.http.get(`${apiUrl}/houses`
+    const apiUrl = environment.testApiUrl;
+    this.http.get<{ statusCode: number; headers: any; body: string }>(`${apiUrl}/houses`
     ).subscribe(res => {
-      this.houses = res as House[]
+      this.houses = JSON.parse(res.body) as House[]
+      console.log(this.houses);
       this.houses = this.houses
         .filter(house => house['featured'] == true)
         .map(house => ({

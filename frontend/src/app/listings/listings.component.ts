@@ -16,13 +16,13 @@ export class ListingsComponent {
   constructor(private http: HttpClient, private router: Router){}
 
   s3Url = environment.s3Url
-  apiUrl = environment.apiUrl
+  apiUrl = environment.testApiUrl;
   houses: House[] = [] // [{address: 'hdad', ..., imgUrls: ['adasdasd', 'asdasd']}, {...}]
 
   async loadData(){
-    this.http.get(`${this.apiUrl}/houses`
+    this.http.get<{ statusCode: number; headers: any; body: string }>(`${this.apiUrl}/houses`
     ).subscribe(res => {
-      this.houses = res as House[]
+      this.houses = JSON.parse(res.body) as House[]
     })
   }
 
