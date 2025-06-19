@@ -21,7 +21,7 @@ import { CognitoService } from '../cognito.service';
 export class ListingComponent {
   constructor(private route: ActivatedRoute, private http: HttpClient, private title: Title, private router: Router, private cognitoService: CognitoService) {}
 
-  apiUrl = environment.testApiUrl
+  apiUrl = environment.apiUrl
 
   houseId = ''
   house: House = {} as House
@@ -41,10 +41,13 @@ export class ListingComponent {
     this.houseId = this.route.snapshot.paramMap.get('id') as string
     
     this.http.get(`${this.apiUrl}/houses/${this.houseId}`
-    ).subscribe(res => {
-      this.house = res as House
-      this.title.setTitle(this.house['address'])
-    })
+    ).subscribe({
+      next: res => {
+        this.house = res as House
+        this.title.setTitle(this.house['address'])
+      },
+      error: err => console.error('error', err)
+    });
 
     try {
       let usr = await this.cognitoService.getCurrentUser()
